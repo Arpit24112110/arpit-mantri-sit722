@@ -120,7 +120,7 @@ jobs:
       - name: ACR login
         uses: azure/docker-login@v1
         with:
-          login-server: sit722acr.azurecr.io
+          login-server: sit722acr224752512.azurecr.io
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
@@ -129,28 +129,28 @@ jobs:
         with:
           context: ./backend/customer_service
           push: true
-          tags: sit722acr.azurecr.io/customer-service:latest
+          tags: sit722acr224752512.azurecr.io/customer-service:latest
 
       - name: Build and push order-service
         uses: docker/build-push-action@v4
         with:
           context: ./backend/order_service
           push: true
-          tags: sit722acr.azurecr.io/order-service:latest
+          tags: sit722acr224752512.azurecr.io/order-service:latest
 
       - name: Build and push product-service
         uses: docker/build-push-action@v4
         with:
           context: ./backend/product_service
           push: true
-          tags: sit722acr.azurecr.io/product-service:latest
+          tags: sit722acr224752512.azurecr.io/product-service:latest
 
       - name: Build and push frontend
         uses: docker/build-push-action@v4
         with:
           context: ./frontend
           push: true
-          tags: sit722acr.azurecr.io/frontend:latest
+          tags: sit722acr224752512.azurecr.io/frontend:latest
 
   # 5. Deploy to Staging (only on testing branch)
   deploy-staging:
@@ -169,8 +169,8 @@ jobs:
           az container create \
             --resource-group sit722-rg \
             --name staging-env \
-            --image sit722acr.azurecr.io/frontend:latest \
-            --registry-login-server sit722acr.azurecr.io \
+            --image sit722acr224752512.azurecr.io/frontend:latest \
+            --registry-login-server sit722acr224752512.azurecr.io \
             --registry-username ${{ secrets.ACR_USERNAME }} \
             --registry-password ${{ secrets.ACR_PASSWORD }} \
             --dns-name-label sit722-staging-${{ github.run_id }} \
@@ -207,8 +207,8 @@ jobs:
           az container create \
             --resource-group sit722-rg \
             --name prod-env \
-            --image sit722acr.azurecr.io/frontend:latest \
-            --registry-login-server sit722acr.azurecr.io \
+            --image sit722acr224752512.azurecr.io/frontend:latest \
+            --registry-login-server sit722acr224752512.azurecr.io \
             --registry-username ${{ secrets.ACR_USERNAME }} \
             --registry-password ${{ secrets.ACR_PASSWORD }} \
             --dns-name-label sit722-prod \
