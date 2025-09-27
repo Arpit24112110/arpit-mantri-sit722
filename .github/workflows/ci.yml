@@ -122,33 +122,26 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Azure Container Registry login
-        uses: azure/docker-login@v1
-        with:
-          login-server: ${{ secrets.ACR_NAME }}.azurecr.io
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
-
       - name: Build and push customer-service
         run: |
           cd backend/customer_service
-          docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/customer-service:latest .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/customer-service:latest
+          docker build -t sit722acr.azurecr.io/customer-service:latest .
+          docker push sit722acr.azurecr.io/customer-service:latest
 
       - name: Build and push order-service
         run: |
           cd backend/order_service
-          docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/order-service:latest .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/order-service:latest
+          docker build -t sit722acr.azurecr.io/order-service:latest .
+          docker push sit722acr.azurecr.io/order-service:latest
 
       - name: Build and push product-service
         run: |
           cd backend/product_service
-          docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/product-service:latest .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/product-service:latest
+          docker build -t sit722acr.azurecr.io/product-service:latest .
+          docker push sit722acr.azurecr.io/product-service:latest
 
       - name: Build and push frontend
         run: |
           cd frontend
-          docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/frontend:latest .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/frontend:latest
+          docker build -t sit722acr.azurecr.io/frontend:latest .
+          docker push sit722acr.azurecr.io/frontend:latest
