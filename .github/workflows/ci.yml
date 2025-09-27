@@ -126,22 +126,22 @@ jobs:
 
       - name: Build and push customer-service
         run: |
-          docker build -t sit722acr224752512.azurecr.io/customer-service:latest ./backend/customer_service
+          DOCKER_BUILDKIT=1 docker build -t sit722acr224752512.azurecr.io/customer-service:latest ./backend/customer_service
           docker push sit722acr224752512.azurecr.io/customer-service:latest
 
       - name: Build and push order-service
         run: |
-          docker build -t sit722acr224752512.azurecr.io/order-service:latest ./backend/order_service
+          DOCKER_BUILDKIT=1 docker build -t sit722acr224752512.azurecr.io/order-service:latest ./backend/order_service
           docker push sit722acr224752512.azurecr.io/order-service:latest
 
       - name: Build and push product-service
         run: |
-          docker build -t sit722acr224752512.azurecr.io/product-service:latest ./backend/product_service
+          DOCKER_BUILDKIT=1 docker build -t sit722acr224752512.azurecr.io/product-service:latest ./backend/product_service
           docker push sit722acr224752512.azurecr.io/product-service:latest
 
       - name: Build and push frontend
         run: |
-          docker build -t sit722acr224752512.azurecr.io/frontend:latest ./frontend
+          DOCKER_BUILDKIT=1 docker build -t sit722acr224752512.azurecr.io/frontend:latest ./frontend
           docker push sit722acr224752512.azurecr.io/frontend:latest
 
   # 5. Deploy to Staging (only on testing branch)
