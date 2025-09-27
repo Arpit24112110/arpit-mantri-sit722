@@ -126,29 +126,34 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        with:
-          install: true
-          driver: docker-container
 
       - name: Build and push customer-service
-        run: |
-          DOCKER_BUILDKIT=1 docker build -t sit722acr224752512.azurecr.io/customer-service:latest ./backend/customer_service
-          docker push sit722acr224752512.azurecr.io/customer-service:latest
+        uses: docker/build-push-action@v4
+        with:
+          context: ./backend/customer_service
+          push: true
+          tags: sit722acr224752512.azurecr.io/customer-service:latest
 
       - name: Build and push order-service
-        run: |
-          DOCKER_BUILDKIT=1 docker build -t sit722acr224752512.azurecr.io/order-service:latest ./backend/order_service
-          docker push sit722acr224752512.azurecr.io/order-service:latest
+        uses: docker/build-push-action@v4
+        with:
+          context: ./backend/order_service
+          push: true
+          tags: sit722acr224752512.azurecr.io/order-service:latest
 
       - name: Build and push product-service
-        run: |
-          DOCKER_BUILDKIT=1 docker build -t sit722acr224752512.azurecr.io/product-service:latest ./backend/product_service
-          docker push sit722acr224752512.azurecr.io/product-service:latest
+        uses: docker/build-push-action@v4
+        with:
+          context: ./backend/product_service
+          push: true
+          tags: sit722acr224752512.azurecr.io/product-service:latest
 
       - name: Build and push frontend
-        run: |
-          DOCKER_BUILDKIT=1 docker build -t sit722acr224752512.azurecr.io/frontend:latest ./frontend
-          docker push sit722acr224752512.azurecr.io/frontend:latest
+        uses: docker/build-push-action@v4
+        with:
+          context: ./frontend
+          push: true
+          tags: sit722acr224752512.azurecr.io/frontend:latest
 
   # 5. Deploy to Staging (only on testing branch)
   deploy-staging:
