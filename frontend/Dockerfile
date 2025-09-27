@@ -1,10 +1,14 @@
-﻿FROM python:3.9-slim
+﻿# Use Nginx to serve the frontend
+FROM nginx:alpine
 
-WORKDIR /app
+# Copy custom Nginx configuration (if you have one)
+COPY nginx.conf /etc/nginx/nginx.conf
 
-COPY requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy frontend static files into the container
+COPY . /usr/share/nginx/html
 
-COPY . .
+# Expose port 3000 to match docker-compose and pipeline
+EXPOSE 3000
 
-CMD ["python", "app/main.py"]
+# Start Nginx in foreground
+CMD ["nginx", "-g", "daemon off;"]
