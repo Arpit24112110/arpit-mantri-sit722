@@ -1,0 +1,53 @@
+services:
+  customer-service:
+    build:
+      context: ./backend/customer_service
+      dockerfile: Dockerfile
+    image: sit722acr224752512.azurecr.io/customer-service:latest
+    ports:
+      - "5001:5000"
+    depends_on:
+      - db
+
+  order-service:
+    build:
+      context: ./backend/order_service
+      dockerfile: Dockerfile
+    image: sit722acr224752512.azurecr.io/order-service:latest
+    ports:
+      - "5002:5000"
+    depends_on:
+      - db
+      - customer-service
+      - product-service
+
+  product-service:
+    build:
+      context: ./backend/product_service
+      dockerfile: Dockerfile
+    image: sit722acr224752512.azurecr.io/product-service:latest
+    ports:
+      - "5003:5000"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: sit722acr224752512.azurecr.io/frontend:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - customer-service
+      - order-service
+      - product-service
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: appdb
+    ports:
+      - "5432:5432"
