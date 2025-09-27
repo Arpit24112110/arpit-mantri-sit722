@@ -6,11 +6,23 @@ on:
       - testing
 
 jobs:
-  build-and-test:
+  build-test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: [customer_service, order_service, product_service]
+
+    services:
+      postgres:
+        image: postgres:13
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: customers
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - name: Checkout code
@@ -19,29 +31,23 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: "3.9"
 
       - name: Install dependencies
         run: |
-          cd backend/${{ matrix.service }}
           python -m pip install --upgrade pip
-          pip install -r requirements-dev.txt
+          pip install -r backend/order_service/requirements.txt
+          pip install -r backend/customer_service/requirements.txt
 
-      - name: Run tests
+      - name: Run tests for Order Service
         run: |
-          cd backend/${{ matrix.service }}
+          cd backend/order_service
           pytest --maxfail=1 --disable-warnings -q
 
-  build-and-push:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: [customer_service, order_service, product_service, frontend]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Run tests for Customer Service
+        run: |
+          cd backend/customer_service
+          pytest --maxfail=1 --disable-warnings -q
 
       - name: Log in to Azure
         uses: azure/login@v1
@@ -50,14 +56,11 @@ jobs:
 
       - name: Log in to ACR
         run: |
-          az acr login --name ${{ secrets.ACR_NAME }}
+          az acr login --name arpit722acr999
 
-      - name: Build and push image
+      - name: Build and push Docker images
         run: |
-          IMAGE_NAME=${{ matrix.service }}
-          if [ "$IMAGE_NAME" = "frontend" ]; then
-            docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/$IMAGE_NAME:latest ./frontend
-          else
-            docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/$IMAGE_NAME:latest ./backend/$IMAGE_NAME
-          fi
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/$IMAGE_NAME:latest
+          docker build -t arpit722acr999.azurecr.io/order_service:latest ./backend/order_service
+          docker build -t arpit722acr999.azurecr.io/customer_service:latest ./backend/customer_service
+          docker push arpit722acr999.azurecr.io/order_service:latest
+          docker push arpit722acr999.azurecr.io/customer_service:latest
