@@ -177,18 +177,18 @@ jobs:
             --registry-username ${{ secrets.ACR_USERNAME }} \
             --registry-password ${{ secrets.ACR_PASSWORD }} \
             --dns-name-label sit722-staging-${{ github.run_id }} \
-            --ports 3000 \
+            --ports 80 \
             --os-type Linux \
             --cpu 1 \
             --memory 1.5
           echo "Staging environment running at:"
-          echo "http://sit722-staging-${{ github.run_id }}.australiaeast.azurecontainer.io:3000"
+          echo "http://sit722-staging-${{ github.run_id }}.australiaeast.azurecontainer.io"
 
       - name: Acceptance Test
         run: |
           echo "Waiting for staging app to boot..."
           sleep 20
-          curl -f http://sit722-staging-${{ github.run_id }}.australiaeast.azurecontainer.io:3000
+          curl -f http://sit722-staging-${{ github.run_id }}.australiaeast.azurecontainer.io
 
       - name: Destroy staging
         if: always()
@@ -218,7 +218,7 @@ jobs:
             --registry-username ${{ secrets.ACR_USERNAME }} \
             --registry-password ${{ secrets.ACR_PASSWORD }} \
             --dns-name-label sit722-prod \
-            --ports 3000 \
+            --ports 80 \
             --os-type Linux \
             --cpu 1 \
             --memory 1.5
