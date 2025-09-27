@@ -104,6 +104,12 @@ jobs:
         run: |
           cd backend/product_service
           pytest -v
+          - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          install: true
+          driver: docker-container
+
 
   # 4. Build & Push Docker Images
   build-and-push:
