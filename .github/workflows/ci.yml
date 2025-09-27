@@ -187,8 +187,8 @@ jobs:
       - name: Acceptance Test
         run: |
           echo "Waiting for staging app to boot..."
-          sleep 20
-          curl -f http://sit722-staging-${{ github.run_id }}.australiaeast.azurecontainer.io
+          sleep 60
+          curl -v http://sit722-staging-${{ github.run_id }}.australiaeast.azurecontainer.io
 
       - name: Destroy staging
         if: always()

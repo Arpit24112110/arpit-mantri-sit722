@@ -1,14 +1,13 @@
-﻿# Use Nginx to serve the frontend
+﻿# Step 1: Build the frontend app
+FROM node:16-alpine as build
+WORKDIR /app
+COPY . .
+RUN npm install
+RUN npm run build
+
+# Step 2: Serve the built app with Nginx
 FROM nginx:alpine
-
-# Copy frontend static files into the container
-COPY . /usr/share/nginx/html
-
-# Copy custom Nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port 80 (Nginx default)
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
-
-# Start Nginx in foreground
 CMD ["nginx", "-g", "daemon off;"]
