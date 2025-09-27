@@ -177,7 +177,8 @@ jobs:
             --registry-username ${{ secrets.ACR_USERNAME }} \
             --registry-password ${{ secrets.ACR_PASSWORD }} \
             --dns-name-label sit722-staging-${{ github.run_id }} \
-            --ports 3000
+            --ports 3000 \
+            --os-type Linux
           echo "Staging environment running at:"
           echo "http://sit722-staging-${{ github.run_id }}.australiaeast.azurecontainer.io:3000"
 
@@ -215,4 +216,5 @@ jobs:
             --registry-username ${{ secrets.ACR_USERNAME }} \
             --registry-password ${{ secrets.ACR_PASSWORD }} \
             --dns-name-label sit722-prod \
-            --ports 3000
+            --ports 3000 \
+            --os-type Linux
