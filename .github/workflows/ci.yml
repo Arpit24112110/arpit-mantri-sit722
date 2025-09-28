@@ -188,7 +188,7 @@ jobs:
         run: |
           echo "Waiting for staging app to boot..."
           sleep 60
-          curl -v http://sit722-staging-${{ github.run_id }}.australiaeast.azurecontainer.io
+          curl -f http://sit722-staging-${{ github.run_id }}.australiaeast.azurecontainer.io
 
       - name: Destroy staging
         if: always()
@@ -222,3 +222,5 @@ jobs:
             --os-type Linux \
             --cpu 1 \
             --memory 1.5
+          echo "Production environment running at:"
+          echo "http://sit722-prod.australiaeast.azurecontainer.io"
